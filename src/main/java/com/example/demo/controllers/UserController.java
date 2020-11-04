@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,10 @@ public class UserController {
 	@Autowired
 	UserRepository userRepository;
 
-
+	@Autowired
+	PasswordEncoder encoder;
+	
+	
 	@GetMapping("/users")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<User> getUsers() {
@@ -56,7 +60,8 @@ public class UserController {
 		System.out.println(findById);
 		findById.setUsername(user.getUsername());
 		findById.setEmail(user.getEmail());
-		findById.setPassword(user.getPassword());
+		String encode = encoder.encode(user.getPassword());
+		findById.setPassword(encode);
 		userRepository.save(findById);
 
 	}
