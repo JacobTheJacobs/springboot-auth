@@ -71,23 +71,9 @@ public class AuthController {
 			String password = user.getPassword();
 			System.out.println(password);
 			
-			Authentication authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			String jwt = jwtUtils.generateJwtToken(authentication);
-			
-			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
-			List<String> roles = userDetails.getAuthorities().stream()
-					.map(item -> item.getAuthority())
-					.collect(Collectors.toList());
-
-			return ResponseEntity.ok(new JwtResponse(jwt, 
-													 userDetails.getId(), 
-													 userDetails.getUsername(), 
-													 userDetails.getEmail(), 
-													 roles));
-			
 		}
+		
+		
 		System.out.println("there");
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
